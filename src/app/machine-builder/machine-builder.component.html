@@ -1,0 +1,121 @@
+
+<div class="flex-align flex-column top-right">
+    <button class="my-button sim-page" (click)="goToSim()">Go to Simulation</button>      
+</div>
+
+<div class="flex-align flex-column">
+   
+    <div class="header-text header-margins">Turing Machine Builder</div>
+
+    <div>
+        <button class="my-button" (click)="showLoadMenu()">Load</button>
+    </div>
+
+    <div class="flex-align flex-column">
+        <label class="header-text header-margins">Machine Name:</label>
+        <input class="text-input" [(ngModel)]="loadedMachine.name" type="text"/>
+    </div>
+
+    <div class="flex-column">
+        <div class="flex-align flex-column">
+            <div class="header-text header-margins">Input Alphabet:</div>
+
+            <div *ngIf="!inputSymbolReq" class="error-label">
+                Alphabet requires at least one input symbol!
+            </div>
+
+            <div *ngFor="let symbol of loadedMachine.inputAlphabet; let idx = index">
+                <input class="text-input" [(ngModel)]="symbol.name" type="text" />
+                <button class="my-button" (click)="removeSymbol(symbol)">Remove</button>
+            </div>
+        </div>
+        <div class="flex-align">
+            <button class="my-button" (click)="addSymbol(true)">Add Symbol</button>   
+        </div>
+    </div>
+
+    <div class="flex-column">
+        <div class="flex-align flex-column">
+            <div class="header-text header-margins">Tape Only Alphabet:</div>
+            <div *ngFor="let symbol of tapeSpecial; let idx = index">
+                <input class="text-input" [(ngModel)]="symbol.name" type="text" />
+                <button class="my-button" (click)="removeSymbol(symbol)">Remove</button>
+            </div>
+        </div>
+        <div class="flex-align">
+            <button class="my-button" (click)="addSymbol()">Add Tape Symbol</button>   
+        </div>
+    </div>
+
+    <div class="flex-column">
+        <div class="flex-align flex-column">
+            <div class="header-text header-margins">Blank Symbol:</div>
+            <input class="text-input" [(ngModel)]="this.loadedMachine.blankSymbol.name" type="text" />
+        </div>
+    </div> 
+
+    
+    <div class="flex-column">
+        <div class="flex-align flex-column">
+            <div class="header-text header-margins header-margins">States:</div>
+
+            <div *ngIf="!stateCountReq" class="error-label">
+                Machine requires at least one state!
+            </div>
+
+            <div *ngIf="!stateAcceptReq" class="error-label">
+                Machine requires at least one accept state!
+            </div>
+
+            <div *ngIf="!stateInitialReq" class="error-label">
+                Machine requires an initial state!
+            </div>
+
+            <div class="state-container" *ngFor="let state of loadedMachine.states; let idx = index">
+                <div class="margin5px">
+                    <input class="text-input" [(ngModel)]="state.name" />
+                </div>
+                <div class="margin5px">
+                    <button class="my-button margin5px" [class.triggered]="loadedMachine.initialState == state" (click)="setInitialState(state)">
+                        {{ loadedMachine.initialState == state ? 'Unset Initial' : 'Set as Initial' }}
+                    </button>
+                    <button class="my-button margin5px" [class.triggered]="loadedMachine.acceptStates.includes(state)" (click)="setAcceptState(state)">
+                        {{ loadedMachine.acceptStates.includes(state) ? 'Unset as Accept' : 'Set as Accept' }}
+                    </button>
+                    <button class="my-button margin5px" [class.triggered]="loadedMachine.rejectStates.includes(state)" (click)="setRejectState(state)">
+                        {{ loadedMachine.rejectStates.includes(state) ? 'Unset as Reject' : 'Set as Reject' }}
+                    </button>
+                </div>
+                <div class="margin5px">
+                    <button class="my-button" (click)="removeState(state)">Remove</button>
+                </div>
+                
+                
+            </div>
+        </div>
+        <div class="flex-align">
+            <button class="my-button" (click)="addState()">Add State</button>   
+        </div>
+    </div>
+
+    <div class="flex-column flex-align">
+        <div class="header-text header-margins">Transition Table</div>
+        <app-transition-table [tmBlueprint]="loadedMachine"></app-transition-table>
+    </div>
+    
+    <div class="flex-align flex-column">   
+        <button [disabled]="!okMachine" [class.disabled]="!okMachine" class="my-button margin5px" (click)="build()">Save and Simulate</button>
+    </div>
+    
+    
+</div>
+
+<div class="gray-overlay" *ngIf="loadMenuActive" (click)="hideLoadMenu()"></div>
+
+<div class="flex-align flex-column load-overlay w-thirty" *ngIf="loadMenuActive">
+    <div class="header-text">Saved machines:</div>
+    <div class="flex-align flex-row w-eighty" *ngFor="let name of savedNames">
+        <button class="my-button" (click)="load(name)">{{name}}</button>
+        <button class="x-button" style="margin-left: 15px;" (click)="deletebp(name)">X</button>
+    </div>
+</div>

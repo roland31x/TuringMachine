@@ -1,0 +1,15 @@
+<div class="grid-container overflowable-x" >
+
+    <div class="header-item" [style.grid-column]='0' [style.grid-row]='0'>DF</div>
+
+    <div *ngFor="let symbol of tmBlueprint.tapeAlphabet; let col = index" class="header-item flex-align" [style.grid-column]='col + 2' [style.grid-row]='1'>{{symbol.name}}</div>
+    <ng-container *ngFor="let state of tmBlueprint.states; let row = index">
+        <div class="header-item flex-align" [style.grid-column]='1' [style.grid-row]='row + 2'>
+            <div>{{state.name}}</div>
+            <div *ngIf="tmBlueprint.acceptStates.includes(state)">(Accept)</div>
+            <div *ngIf="tmBlueprint.rejectStates.includes(state)">(Reject)</div>
+            <div *ngIf="tmBlueprint.initialState == state">(Initial)</div>
+        </div>
+        <app-transition-builder [builder]="editable" class="header-item flex-align" *ngFor="let transition of state.transitions; let trIDX = index" [state]="state" [machine]="tmBlueprint" [transition]="transition" [style.grid-column]="tmBlueprint.tapeAlphabet.indexOf(transition.inputSymbol) + 2" [style.grid-row]="row + 2"></app-transition-builder>
+    </ng-container>
+</div>

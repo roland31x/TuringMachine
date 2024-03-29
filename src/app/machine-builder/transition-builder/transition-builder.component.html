@@ -1,0 +1,29 @@
+<div class="flex-align flex-row">
+    <div *ngIf="!finalState()">(</div>
+    <div *ngIf="!builder">
+        {{transition!.nextState.name}}
+    </div>
+    <select *ngIf="builder" class="select-input margin5px" [(ngModel)]="transition!.nextState">
+        <option class="option-element" *ngFor="let state of this.machine?.states" [ngValue]="state">{{state.name}}</option>
+    </select>
+    <div *ngIf="!finalState()" class="flex-row">
+        <div>,</div>
+        <div *ngIf="!builder">
+            {{transition!.outputSymbol.name}}
+        </div>
+        <select *ngIf="builder"  class="select-input margin5px" [(ngModel)]="transition!.outputSymbol">
+            <option class="option-element" *ngFor="let symbol of this.machine?.tapeAlphabet" [ngValue]="symbol">{{symbol.name}}</option>
+        </select>
+    </div>
+    <div *ngIf="!finalState()" class="flex-row">
+        <div>,</div>
+        <div *ngIf="!builder">
+            {{transition!.direction}}
+        </div>
+        <select *ngIf="builder" class="select-input margin5px" [(ngModel)]="transition!.direction">
+            <option *ngFor="let dir of ['L', 'R']" [ngValue]="dir">{{dir}}</option>
+        </select>
+    </div>
+    
+    <div *ngIf="!finalState()">)</div>
+</div>

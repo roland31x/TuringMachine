@@ -1,0 +1,85 @@
+<button class="my-button top-left" (click)="buildPage()">Back To Building</button>
+
+<div class="flex-align flex-column">
+    <div class="header-text header-margins">Turing Machine Simulation</div>
+    <select class="select-input margin5px" (change)="changeMachine($event)">
+        <option class="option-element" *ngFor="let name of savedMachines" [selected]="this.machine.blueprint.name == name" [ngValue]="name">{{name}}</option>
+    </select>
+
+</div>
+
+<div class="flex-align flex-column">
+
+    <div class="header-margins">
+        <button *ngIf="!this.machine.running" class="my-button" (click)="start()">Run</button>
+        <button *ngIf="this.machine.running" class="my-button" (click)="stop()">Stop</button>
+        
+    </div>
+
+    <div class="info-box header-text header-margins" *ngIf="this.machineMessage">{{this.machineMessage}}</div>
+
+    <div class="header-text header-margins">Tape:</div>
+
+    <div class="flex-align flex-column main-tape-container">
+        <div class="flex-row tape-container" [style.transform]="tapePosition">
+            <div *ngFor="let cell of this.machine.tapeL.reverse(); let i = index">
+                <div class="flex-align tape-cell animatable" 
+                    [class.light-cell]="i % 2 == 0" 
+                    [class.dark-cell]="i % 2 == 1" 
+                    [class.text-pop]="this.machine.headPointer < 0 && ((this.machine.headPointer * -1) - 1 == this.machine.tapeL.length - 1 - i) && this.animateChanges">
+                    {{cell.value.name}}
+                </div>
+            </div>
+            <div *ngFor="let cell of this.machine.tapeR; let i = index">
+                <div class="flex-align tape-cell animatable" 
+                    [class.light-cell]="(this.machine.tapeL.length + i) % 2 == 0" 
+                    [class.dark-cell]="(this.machine.tapeL.length + i) % 2 == 1" 
+                    [class.text-pop]="this.machine.headPointer >= 0 && this.machine.headPointer == i && this.animateChanges">
+                    {{cell.value.name}}
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <div class="flex-align flex-column head-pointer relative" style="align-self: center;">
+        <div style="color: var(--bg-light)" class="animatable" [class.go-up]="this.animateChanges">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-chevron-up" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"/>
+            </svg>
+        </div>
+        <div class="header-text animatable" [class.pop]="this.animateChanges">
+            {{this.machine.currentState?.name}}
+        </div>
+        
+        <div class="flex-column" style="position: absolute; transform: translateX(100%); top:0;">
+            <label class="header-text header-margins" for="slider">Step Delay:</label>
+            <input style="width: 300px;" type="range" id="slider" name="slider" min="200" max="3000" [(ngModel)]="this.machine.stepdelay">
+        </div>
+
+        <div *ngIf="!this.machine.running" class="input-div flex-align flex-column" style="transform: translateX(-100%); margin-top: -75px;">
+
+            <div class="header-text header-margins">Input:</div>
+            <div class="text-input" style="min-width: 300px;">{{inputString == "" ? "{no input}" : inputString}}</div>
+            <div class="flex-align flex-row header-margins`">
+                <button class="my-button" style="width: 100px;" (click)="clearInput()">Clear</button>
+                <button class="my-button" style="margin-left: 20px; width: 100px;" (click)="backspace()">Delete</button>
+            </div>
+
+
+            <div class="flex-align flex-row keyboard-container">
+                <div *ngFor="let symbol of machine.blueprint.inputAlphabet">
+                    <button class="my-button" style="margin-left: 3px; margin-right: 3px;" (click)="addInputSymbol(symbol)">{{symbol.name}}</button>
+                </div>
+            </div>
+
+        </div>  
+
+    </div>
+
+    <div class="flex-column flex-align">
+        <div class="header-text header-margins">Transition Table</div>
+        <app-transition-table [tmBlueprint]="this.machine.blueprint" [editable]="false"></app-transition-table>
+    </div>
+
+</div>
