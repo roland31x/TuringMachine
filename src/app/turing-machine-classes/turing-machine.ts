@@ -78,7 +78,7 @@ export class TuringMachine{
 
                 if(this.headPointer < 0){
                     
-                    this.tapeL[(this.headPointer * -1) - 1].value = transition.outputSymbol;
+                    this.tapeL[(this.tapeL.length - 1) - ((this.headPointer * -1) - 1)].value = transition.outputSymbol;
                 }
                 else{
                     this.tapeR[this.headPointer].value = transition.outputSymbol;
@@ -95,8 +95,8 @@ export class TuringMachine{
 
                 } else if(transition.direction == 'L'){
                    
-                    if(this.headPointer - 1 < 0 && this.headPointer - 1 == this.tapeL.length){
-                        this.tapeL.push(new KVP(0,this.blueprint.blankSymbol));
+                    if(this.headPointer < 0 && (this.headPointer * -1) + 1 == this.tapeL.length){
+                        this.tapeL.unshift(new KVP(0,this.blueprint.blankSymbol));
                     }
 
                     this.headPointer--;
@@ -118,7 +118,7 @@ export class TuringMachine{
 
     private getSymbol() : Symbol{
         if(this.headPointer < 0){
-            return this.tapeL[this.headPointer * -1].value;
+            return this.tapeL[(this.tapeL.length - 1) - ((this.headPointer * -1) - 1)].value;
         } else {
             return this.tapeR[this.headPointer].value;
         }

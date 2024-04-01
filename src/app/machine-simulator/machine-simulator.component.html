@@ -22,11 +22,11 @@
 
     <div class="flex-align flex-column main-tape-container">
         <div class="flex-row tape-container" [style.transform]="tapePosition">
-            <div *ngFor="let cell of this.machine.tapeL.reverse(); let i = index">
+            <div *ngFor="let cell of this.machine.tapeL; let i = index">
                 <div class="flex-align tape-cell animatable" 
                     [class.light-cell]="i % 2 == 0" 
                     [class.dark-cell]="i % 2 == 1" 
-                    [class.text-pop]="this.machine.headPointer < 0 && ((this.machine.headPointer * -1) - 1 == this.machine.tapeL.length - 1 - i) && this.animateChanges">
+                    [class.text-pop]="this.machine.headPointer < 0 && ((this.machine.headPointer * - 1) - 1 == this.machine.tapeL.length - 1 - i) && this.animateChanges">
                     {{cell.value.name}}
                 </div>
             </div>
