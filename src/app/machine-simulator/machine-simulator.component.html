@@ -77,9 +77,11 @@
 
     </div>
 
-    <div class="flex-column flex-align">
-        <div class="header-text header-margins">Transition Table</div>
-        <app-transition-table [tmBlueprint]="this.machine.blueprint" [editable]="false"></app-transition-table>
+    <div *ngIf="!(this.machine.blueprint.states.length * this.machine.blueprint.tapeAlphabet.length > 200)">
+        <div class="flex-column flex-align">
+            <div class="header-text header-margins">Transition Table</div>
+            <app-transition-table [tmBlueprint]="this.machine.blueprint" [editable]="false"></app-transition-table>
+        </div>
     </div>
 
 </div>

@@ -1,14 +1,12 @@
 import { NgFor, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import { TuringMachineBuilder } from '../turing-machine-classes/turing-machine-builder';
-import { TransitionBuilderComponent } from './transition-builder/transition-builder.component';
 import { State, Symbol } from '../turing-machine-classes/turing-machine';
 import { FormsModule, NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
-import { MachineSimulatorComponent } from '../machine-simulator/machine-simulator.component';
-import { LocalStorageService } from '../services/local-storage.service';
 import { MachineStorageService } from '../services/machine-storage.service';
 import { TransitionTableComponent } from './transition-table/transition-table.component';
+
 
 @Component({
   selector: 'app-machine-builder',
@@ -26,8 +24,9 @@ export class MachineBuilderComponent {
   constructor(
     private router : Router,
     private blueprintStorage: MachineStorageService
-  ) { }
-  
+  ) {}
+
+
   get loadedMachine() {
     return this.machineService.loadedMachine;
   }
@@ -116,9 +115,7 @@ export class MachineBuilderComponent {
   }
 
   build(){
-
     this.blueprintStorage.saveBlueprint(this.loadedMachine, this.loadedMachine.name);
-
     this.goToSim();
   }
 }
