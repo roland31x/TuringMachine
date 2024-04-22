@@ -75,7 +75,7 @@ export async function BuildVigenere(encrypt : boolean) : Promise<TuringMachineBl
     refreshKey.transitions.push(new Transition(sep, readKey, sep, 'R'));
     findKey.transitions.push(new Transition(sep, readKey, sep, 'R'));
     readKey.transitions.push(new Transition(blank, refreshKey, blank, 'L'));
-    machine.name = "Vigenere Encrypt";
+    machine.name = "Vigenere " + (encrypt ? "Encrypt" : "Decrypt");
 
 
     //regularize
