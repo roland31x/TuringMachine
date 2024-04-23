@@ -108,15 +108,30 @@
         <button [disabled]="!okMachine" [class.disabled]="!okMachine" class="my-button margin5px" (click)="build()">Save and Simulate</button>
     </div>
     
-    
 </div>
 
-<div class="gray-overlay" *ngIf="loadMenuActive" (click)="hideLoadMenu()"></div>
+<div class="gray-overlay" *ngIf="loadMenuActive && !loading" (click)="hideLoadMenu()"></div>
 
-<div class="flex-align flex-column load-overlay w-thirty" *ngIf="loadMenuActive">
+<div class="flex-align flex-column load-overlay w-thirty" *ngIf="loadMenuActive && !loading">
     <div class="header-text">Saved machines:</div>
     <div class="flex-align flex-row w-eighty" *ngFor="let name of savedNames">
-        <button class="my-button" (click)="load(name)">{{name}}</button>
+        <button class="my-button" style="width: 80%;" (click)="load(name)">{{name}}</button>
         <button class="x-button" style="margin-left: 15px;" (click)="deletebp(name)">X</button>
     </div>
+
+    <div class="gray-overlay" *ngIf="confirmLoadActive" (click)="cancelLoad()"></div>
+
+    <div class="flex-align flex-column load-overlay" style="padding: 15px 25px; justify-content: space-between;" *ngIf="confirmLoadActive">
+        <div class="header-text">Warning!</div>
+        <div class="normal-text" style="text-align: center;">Loading this experimental cryptographic machine will take a long while!</div>
+        <div class="normal-text" style="text-align: center;">Are you sure you want to proceed?</div>
+        <div class="flex-align flex-row flex-justify-space-around" style="width: 100%; height: 50px;">
+            <button class="my-button" style="width: 33%; height: 100%;" (click)="confirmLoad()">Yes</button>
+            <button class="x-button" style="width: 33%; height: 100%;" (click)="cancelLoad()">No</button>
+        </div>
+    </div>
 </div>
+
+<div class="gray-overlay" *ngIf="loading"></div>
+
+

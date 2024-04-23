@@ -168,7 +168,7 @@
     border-color: crimson;
     padding: 5px 10px;
     border-radius: 4px;
-
+    font-size: 1rem;
     &:hover {
         background-color: darkred;
         border-color: darkred;
@@ -199,7 +199,11 @@
     font-size: 2rem;
     font-weight: bold;
     color: var(--bg-light);
+}
 
+.normal-text{
+    font-size: 1rem;
+    color: var(--bg-light);
 }
 
 .header-margins{

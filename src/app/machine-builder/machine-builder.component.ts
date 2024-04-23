@@ -1,7 +1,7 @@
 import { NgFor, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import { TuringMachineBuilder } from '../turing-machine-classes/turing-machine-builder';
-import { State, Symbol } from '../turing-machine-classes/turing-machine';
+import { State, Symbol, TuringMachineBlueprint } from '../turing-machine-classes/turing-machine';
 import { FormsModule, NgModel } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MachineStorageService } from '../services/machine-storage.service';
@@ -20,6 +20,7 @@ export class MachineBuilderComponent {
   private machineService = new TuringMachineBuilder();
 
   loadMenuActive = false;
+  loading = false;
 
   constructor(
     private router : Router,
@@ -99,11 +100,40 @@ export class MachineBuilderComponent {
 
   hideLoadMenu(){
     this.loadMenuActive = false;
+    this.awaitingLoad = null;
+    this.confirmLoadActive = false;
   }
 
-  load(key: string){
-    this.machineService.loadBlueprint(this.blueprintStorage.getBlueprint(key));
+  confirmLoadActive = false;
+  awaitingLoad : TuringMachineBlueprint | null = null;
+  async load(key: string){
+    let fetchedbp = this.blueprintStorage.getBlueprint(key);
+    this.awaitingLoad = fetchedbp;
+    if(fetchedbp.states.length * fetchedbp.tapeAlphabet.length > 200){
+      this.confirmLoadActive = true;
+    }
+    else{
+      await this.confirmLoad();
+    }
+  }
+
+  private async actualLoad(){
+    this.loading = true;
+    await new Promise(resolve => setTimeout(resolve, 1));
+    this.machineService.loadBlueprint(this.awaitingLoad!);
+    await new Promise(resolve => setTimeout(resolve, 1));
+    this.loading = false;
+  }
+
+  async confirmLoad(){
+    await this.actualLoad();
     this.hideLoadMenu();
+    this.confirmLoadActive = false;
+    this.awaitingLoad = null;
+  }
+  cancelLoad(){
+    this.confirmLoadActive = false;
+    this.awaitingLoad = null;
   }
 
   deletebp(key: string){
